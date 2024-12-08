@@ -1,6 +1,6 @@
 package com.rip.RIP_Project.service;
 
-import com.rip.RIP_Project.model.Note;
+import com.rip.RIP_Project.entity.Note;
 import com.rip.RIP_Project.repository.NoteRepository;
 import org.springframework.stereotype.Service;
 

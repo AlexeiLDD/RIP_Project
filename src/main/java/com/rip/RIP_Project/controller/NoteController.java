@@ -1,6 +1,6 @@
 package com.rip.RIP_Project.controller;
 
-import com.rip.RIP_Project.model.Note;
+import com.rip.RIP_Project.entity.Note;
 import com.rip.RIP_Project.service.NoteService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;

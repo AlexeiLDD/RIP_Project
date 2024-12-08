@@ -1,4 +1,4 @@
-package com.rip.RIP_Project.model;
+package com.rip.RIP_Project.entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Entity
 public class Note {
-    // Геттеры и сеттеры
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
