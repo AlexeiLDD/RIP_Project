@@ -1,11 +1,10 @@
 package com.rip.RIP_Project.entity;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Setter
@@ -19,5 +18,9 @@ public class Note {
 
     private String title;
     private String content;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private CustomUser user;
 
 }
