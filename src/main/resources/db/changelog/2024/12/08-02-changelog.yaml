@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1733677016772-1
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_customuser
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: role
+                  type: VARCHAR(255)
+            tableName: custom_user
+  - changeSet:
+      id: 1733677016772-2
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: user
+
