@@ -2,7 +2,7 @@ package com.rip.RIP_Project.service;
 
 import com.rip.RIP_Project.util.JwtUtil;
 import com.rip.RIP_Project.dto.auth.AuthRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    public JwtService(
+            AuthenticationManager authenticationManager,
+            CustomUserDetailsService userDetailsService,
+            JwtUtil jwtUtil) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
+    }
 
     public String createJwtToken(AuthRequest authenticationRequest) throws Exception {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(

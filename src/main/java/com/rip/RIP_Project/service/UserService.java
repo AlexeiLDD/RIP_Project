@@ -2,22 +2,24 @@ package com.rip.RIP_Project.service;
 
 import com.rip.RIP_Project.entity.CustomUser;
 import com.rip.RIP_Project.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    public CustomUser save(CustomUser customUser) {
+    public void save(CustomUser customUser) {
         customUser.setPassword(passwordEncoder.encode(customUser.getPassword()));
-        return userRepository.save(customUser);
+        userRepository.save(customUser);
     }
 
     public CustomUser findByUsername(String username) {
