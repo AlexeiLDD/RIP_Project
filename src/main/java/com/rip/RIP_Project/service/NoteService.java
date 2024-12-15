@@ -2,16 +2,23 @@ package com.rip.RIP_Project.service;
 
 import com.rip.RIP_Project.entity.CustomUser;
 import com.rip.RIP_Project.entity.Note;
+import com.rip.RIP_Project.entity.NoteAccess;
+import com.rip.RIP_Project.repository.NoteAccessRepository;
 import com.rip.RIP_Project.repository.NoteRepository;
+import com.rip.RIP_Project.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
+    private UserRepository userRepository;
+    private NoteAccessRepository noteAccessRepository;
 
     public NoteService(NoteRepository noteRepository) { this.noteRepository = noteRepository; }
 
@@ -25,6 +32,37 @@ public class NoteService {
     public Note getNoteByIdAndUser(Long id, CustomUser user) {
         return noteRepository.findNoteByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
+    }
+    // Предоставление доступа
+    public void grantAccess(Long noteId, String username) {
+        Optional<Note> noteOptional = noteRepository.findById(noteId);
+        CustomUser user = userRepository.findByUsername(username);
+            if (noteOptional.isPresent()) {
+            Note note = noteOptional.get();
+            
+            Optional<NoteAccess> existingAccess = noteAccessRepository.findByNoteAndUser(note, user);
+            if(existingAccess.isEmpty()){
+                NoteAccess noteAccess = new NoteAccess();
+                noteAccess.setNote(note);
+                noteAccess.setUser(user);
+                noteAccessRepository.save(noteAccess);
+            }
+        } else {
+            throw new IllegalArgumentException("Note or user not found");
+        }
+    }
+    // Отбираем доступ
+    public void revokeAccess(Long noteId, String username) {
+        Optional<Note> noteOptional = noteRepository.findById(noteId);
+        CustomUser user = userRepository.findByUsername(username);
+
+        if (noteOptional.isPresent()) {
+            Note note = noteOptional.get();
+            
+            noteAccessRepository.deleteByNoteAndUser(note, user);
+        } else {
+            throw new IllegalArgumentException("Note or user not found");
+        }
     }
 
     // Создать новую заметку

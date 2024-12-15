@@ -1,0 +1,60 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1733687668807-1
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  constraints:
+                    nullable: false
+                  name: custom_user_id
+                  type: BIGINT
+              - column:
+                  constraints:
+                    nullable: false
+                  name: note_id
+                  type: BIGINT
+            tableName: custom_user_note
+  - changeSet:
+      id: 1733687668807-2
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: note_id
+            constraintName: uc_custom_user_note_note
+            tableName: custom_user_note
+  - changeSet:
+      id: 1733687668807-3
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addUniqueConstraint:
+            columnNames: username
+            constraintName: uc_customuser_username
+            tableName: custom_user
+  - changeSet:
+      id: 1733687668807-4
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: custom_user_id
+            baseTableName: custom_user_note
+            constraintName: fk_cususenot_on_custom_user
+            referencedColumnNames: id
+            referencedTableName: custom_user
+  - changeSet:
+      id: 1733687668807-5
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: note_id
+            baseTableName: custom_user_note
+            constraintName: fk_cususenot_on_note
+            referencedColumnNames: id
+            referencedTableName: note
+

@@ -117,4 +117,18 @@ public class NoteController {
 
         return new ResponseEntity<>(new NoteResponse(note), HttpStatus.OK);
     }
+
+    @PostMapping("/{noteId}/grantAccess/{username}")
+    public ResponseEntity<Void> grantAccess(@PathVariable Long noteId, @PathVariable String username) {
+        CustomUser user = userService.findByUsername(username); 
+        noteService.grantAccess(noteId, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{noteId}/revokeAccess/{username}")
+    public ResponseEntity<Void> revokeAccess(@PathVariable Long noteId, @PathVariable String username) {
+        CustomUser user = userService.findByUsername(username); 
+        noteService.revokeAccess(noteId, username);
+        return ResponseEntity.ok().build();
+    }
 }
