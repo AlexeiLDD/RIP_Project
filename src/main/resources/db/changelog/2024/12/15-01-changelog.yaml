@@ -1,0 +1,70 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1734281306384-4
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: custom_user_note
+            constraintName: fk_cususenot_on_custom_user
+  - changeSet:
+      id: 1734281306384-5
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: custom_user_note
+            constraintName: fk_cususenot_on_note
+  - changeSet:
+      id: 1734281306384-1
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: pk_noteaccess
+                  name: id
+                  type: BIGINT
+              - column:
+                  name: note_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+            tableName: note_access
+  - changeSet:
+      id: 1734281306384-2
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: note_id
+            baseTableName: note_access
+            constraintName: FK_NOTEACCESS_ON_NOTE
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: note
+  - changeSet:
+      id: 1734281306384-3
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: note_access
+            constraintName: FK_NOTEACCESS_ON_USER
+            referencedColumnNames: id
+            referencedTableName: custom_user
+  - changeSet:
+      id: 1734281306384-7
+      author: alexeildd
+      objectQuotingStrategy: QUOTE_ONLY_RESERVED_WORDS
+      changes:
+        - dropTable:
+            cascadeConstraints: true
+            tableName: custom_user_note

@@ -17,10 +17,17 @@ import java.util.Optional;
 @Service
 public class NoteService {
     private final NoteRepository noteRepository;
-    private UserRepository userRepository;
-    private NoteAccessRepository noteAccessRepository;
+    private final UserRepository userRepository;
+    private final NoteAccessRepository noteAccessRepository;
 
-    public NoteService(NoteRepository noteRepository) { this.noteRepository = noteRepository; }
+    public NoteService(
+            NoteRepository noteRepository,
+            UserRepository userRepository,
+            NoteAccessRepository noteAccessRepository) {
+        this.noteRepository = noteRepository;
+        this.userRepository = userRepository;
+        this.noteAccessRepository = noteAccessRepository;
+    }
 
     // Получить все заметки
     public List<Note> getAllNotes(CustomUser user) { return noteRepository.findNotesByUser(user); }
@@ -33,6 +40,7 @@ public class NoteService {
         return noteRepository.findNoteByIdAndUser(id, user)
                 .orElseThrow(() -> new RuntimeException("Note not found"));
     }
+
     // Предоставление доступа
     public void grantAccess(Long noteId, String username) {
         Optional<Note> noteOptional = noteRepository.findById(noteId);
@@ -51,6 +59,7 @@ public class NoteService {
             throw new IllegalArgumentException("Note or user not found");
         }
     }
+
     // Отбираем доступ
     public void revokeAccess(Long noteId, String username) {
         Optional<Note> noteOptional = noteRepository.findById(noteId);
@@ -58,8 +67,9 @@ public class NoteService {
 
         if (noteOptional.isPresent()) {
             Note note = noteOptional.get();
-            
-            noteAccessRepository.deleteByNoteAndUser(note, user);
+
+            Optional<NoteAccess> existingAccess = noteAccessRepository.findByNoteAndUser(note, user);
+            existingAccess.ifPresent(noteAccess -> noteAccessRepository.deleteById(noteAccess.getId()));
         } else {
             throw new IllegalArgumentException("Note or user not found");
         }

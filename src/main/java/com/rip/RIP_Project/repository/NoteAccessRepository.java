@@ -8,6 +8,5 @@ import com.rip.RIP_Project.entity.Note;
 import com.rip.RIP_Project.entity.NoteAccess;
 
 public interface NoteAccessRepository extends JpaRepository<NoteAccess, Long>{
-     Optional<NoteAccess> findByNoteAndUser(Note note, CustomUser user);
-    void deleteByNoteAndUser(Note note, CustomUser user);
+    Optional<NoteAccess> findByNoteAndUser(Note note, CustomUser user);
 }

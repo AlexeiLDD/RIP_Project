@@ -10,7 +10,6 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Getter
 @Setter
-
 public class NoteAccess {
     
     @Id

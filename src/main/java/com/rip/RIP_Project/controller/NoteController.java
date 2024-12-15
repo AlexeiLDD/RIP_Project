@@ -25,7 +25,7 @@ public class NoteController {
         this.userService = userService;
     }
 
-  
+
     @GetMapping
     public ResponseEntity<?> getAllNotes(HttpServletRequest request) {
         String username = request.getAttribute("username").toString();
@@ -98,7 +98,8 @@ public class NoteController {
 
         return new ResponseEntity<>("Note deleted successfully", HttpStatus.OK);
     }
-    
+
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateNote(HttpServletRequest request, @PathVariable Long id, @RequestBody Note updatedNote) {
         String username = request.getAttribute("username").toString();
@@ -118,12 +119,14 @@ public class NoteController {
         return new ResponseEntity<>(new NoteResponse(note), HttpStatus.OK);
     }
 
+
     @PostMapping("/{noteId}/grantAccess/{username}")
     public ResponseEntity<Void> grantAccess(@PathVariable Long noteId, @PathVariable String username) {
         CustomUser user = userService.findByUsername(username); 
         noteService.grantAccess(noteId, username);
         return ResponseEntity.ok().build();
     }
+
 
     @PostMapping("/{noteId}/revokeAccess/{username}")
     public ResponseEntity<Void> revokeAccess(@PathVariable Long noteId, @PathVariable String username) {
