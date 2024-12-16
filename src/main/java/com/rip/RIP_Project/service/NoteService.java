@@ -32,6 +32,15 @@ public class NoteService {
     // Получить все заметки
     public List<Note> getAllNotes(CustomUser user) { return noteRepository.findNotesByUser(user); }
 
+    public List<Note> getNotesWithAccess(CustomUser user) {
+        return noteAccessRepository.findByUser(user).stream()
+                .map(NoteAccess::getNote)
+                .toList();
+    }
+
+    public boolean hasAccess(Note note, CustomUser user) {
+        return noteAccessRepository.findByNoteAndUser(note, user).isPresent();
+    }
     // Получить заметку по ID
     public Note getNoteById(Long id) { return noteRepository.findById(id).orElse(null); }
 
