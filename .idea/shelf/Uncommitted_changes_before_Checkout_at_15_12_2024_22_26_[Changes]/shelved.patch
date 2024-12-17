@@ -1,0 +1,20 @@
+Index: target/classes/db/changelog/db.changelog-master.yaml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>databaseChangeLog:\r\n  - include:\r\n      file: db/changelog/changeset/test.yaml\r\n  - include:\r\n      file: db/changelog/changeset/remove-test.yaml\r\n  - include:\r\n      file: db/changelog/2024/12/08-01-changelog.yaml\r\n  - include:\r\n      file: db/changelog/2024/12/08-02-changelog.yaml\r\n  - include:\r\n      file: db/changelog/2024/12/08-03-changelog.yaml\r\n  - include:\r\n      file: db/changelog/2024/12/08-04-changelog.yaml\r\n  - include:\r\n      file: db/changelog/2024/12/08-05-changelog.yaml
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/target/classes/db/changelog/db.changelog-master.yaml b/target/classes/db/changelog/db.changelog-master.yaml
+--- a/target/classes/db/changelog/db.changelog-master.yaml	(revision cdcc1fef665c2a02d84ae9a0806b66505b243a68)
++++ b/target/classes/db/changelog/db.changelog-master.yaml	(date 1734288096599)
+@@ -12,4 +12,6 @@
+   - include:
+       file: db/changelog/2024/12/08-04-changelog.yaml
+   - include:
+-      file: db/changelog/2024/12/08-05-changelog.yaml
+\ No newline at end of file
++      file: db/changelog/2024/12/08-05-changelog.yaml
++  - include:
++      file: db/changelog/2024/12/15-01-changelog.yaml
+\ No newline at end of file
