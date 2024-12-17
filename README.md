@@ -5,9 +5,10 @@ A Notebook project for BMSTU RIP course
   `docker compose up`
     
 Содержимое .env:
-    `POSTGRES_USERNAME=postgres
+
+    POSTGRES_USERNAME=postgres
     POSTGRES_PASSWORD=postgres
-    POSTGRES_PORT=5432
+    POSTGRES_PORT=5432`
 
     PGADMIN_PORT=15432
     PGADMIN_LISTEN_PORT=80
