@@ -1,5 +1,6 @@
 package com.rip.RIP_Project.controller;
 
+import com.rip.RIP_Project.dto.AccessRequest;
 import com.rip.RIP_Project.dto.NoteResponse;
 import com.rip.RIP_Project.entity.CustomUser;
 import com.rip.RIP_Project.entity.Note;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/notes")
@@ -25,16 +27,23 @@ public class NoteController {
         this.userService = userService;
     }
 
-  
+
     @GetMapping
     public ResponseEntity<?> getAllNotes(HttpServletRequest request) {
         String username = request.getAttribute("username").toString();
         CustomUser user = userService.findByUsername(username);
 
-        List<NoteResponse> notesResponse = noteService.getAllNotes(user)
+        List<NoteResponse> userNotes = noteService.getAllNotes(user)
                 .stream().map(NoteResponse::new).toList();
 
-        return new ResponseEntity<>(notesResponse, HttpStatus.OK);
+        List<NoteResponse> sharedNotes = noteService.getNotesWithAccess(user)
+                .stream().map(NoteResponse::new).toList();
+
+        List<NoteResponse> allNotes = Stream.concat(userNotes.stream(), sharedNotes.stream())
+                .distinct() // Убираем дубликаты (если есть)
+                .toList();
+
+        return new ResponseEntity<>(allNotes, HttpStatus.OK);
     }
 
 
@@ -48,9 +57,13 @@ public class NoteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        if (!note.getUser().equals(user)) {
+        boolean isOwner = note.getUser().equals(user);
+        boolean hasAccess = noteService.hasAccess(note, user);
+
+        if (!isOwner && !hasAccess) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+
 
         return new ResponseEntity<>(new NoteResponse(note), HttpStatus.OK);
     }
@@ -98,7 +111,8 @@ public class NoteController {
 
         return new ResponseEntity<>("Note deleted successfully", HttpStatus.OK);
     }
-    
+
+
     @PutMapping("/{id}")
     public ResponseEntity<?> updateNote(HttpServletRequest request, @PathVariable Long id, @RequestBody Note updatedNote) {
         String username = request.getAttribute("username").toString();
@@ -117,4 +131,48 @@ public class NoteController {
 
         return new ResponseEntity<>(new NoteResponse(note), HttpStatus.OK);
     }
+
+
+    @PostMapping("/{noteId}/grantAccess")
+    public ResponseEntity<Void> grantAccess(HttpServletRequest request, @PathVariable Long noteId, @RequestBody AccessRequest accessRequest ) {
+        String currentUsername = (String) request.getAttribute("username");
+        CustomUser currentUser = userService.findByUsername(currentUsername);
+ 
+        Note note = noteService.getNoteById(noteId);
+        if (!note.getUser().equals(currentUser)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        String targetUser =  accessRequest.getUsername();
+        if (targetUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Целевой пользователь не найден
+        }
+        if (currentUsername.equals(accessRequest.getUsername())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Некорректный запрос
+        }
+
+        noteService.grantAccess(noteId, targetUser);
+        return ResponseEntity.ok().build();
+}
+
+
+    @PostMapping("/{noteId}/revokeAccess")
+    public ResponseEntity<Void> revokeAccess(HttpServletRequest request, @PathVariable Long noteId, @RequestBody AccessRequest accessRequest) {
+        String currentUsername = (String) request.getAttribute("username");
+        CustomUser currentUser = userService.findByUsername(currentUsername);
+
+        Note note = noteService.getNoteById(noteId);
+        if (!note.getUser().equals(currentUser)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        String targetUser =  accessRequest.getUsername();
+        if (targetUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Целевой пользователь не найден
+        }
+        if (currentUsername.equals(accessRequest.getUsername())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST); // Некорректный запрос
+        }
+
+    noteService.revokeAccess(noteId, accessRequest.getUsername());
+    return ResponseEntity.ok().build();
+}
 }

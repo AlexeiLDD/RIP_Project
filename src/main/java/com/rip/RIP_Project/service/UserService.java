@@ -25,4 +25,5 @@ public class UserService {
     public CustomUser findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+    
 }
