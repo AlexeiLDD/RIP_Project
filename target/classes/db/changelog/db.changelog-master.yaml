@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/test.yaml
+  - include:
+      file: db/changelog/changeset/remove-test.yaml
+  - include:
+      file: db/changelog/2024/12/08-01-changelog.yaml
+  - include:
+      file: db/changelog/2024/12/08-02-changelog.yaml
+  - include:
+      file: db/changelog/2024/12/08-03-changelog.yaml
+  - include:
+      file: db/changelog/2024/12/08-04-changelog.yaml
+  - include:
+      file: db/changelog/2024/12/08-05-changelog.yaml
